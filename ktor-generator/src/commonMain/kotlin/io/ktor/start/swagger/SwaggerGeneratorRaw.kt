@@ -136,25 +136,34 @@ object SwaggerGeneratorRaw : SwaggerGeneratorBase() {
                         +"this.client = actualHttpClient.config " {
                             +"install(JsonFeature)" {
                                 +"serializer = KotlinSerializer().apply" {
-                                    val allModels = model.routes.values
+                                    val parameterTypes = model.routesList
                                         .map { it.methodsList }
                                         .flatten()
                                         .asSequence()
-                                        .distinctBy { it.responseType.toKotlinType() }
-                                        .toList()
-                                    allModels.forEach {
-                                        if (isListType(it.responseType.toKotlinType())){
-                                            +"registerList(${getListType(it.responseType.toKotlinType())}.serializer().list)"
-                                        } else {
-                                            +"setMapper(${it.responseType.toKotlinType()}::class, ${it.responseType.toKotlinType()}.serializer())"
+                                        .map { it.parametersBody }
+                                        .flatten()
+                                        .map { it.schema.type.toKotlinType() }
+
+                                    val models = model.definitions.values
+                                        .map { it.name }
+
+                                    model.routesList
+                                        .map { it.methodsList }
+                                        .flatten()
+                                        .asSequence()
+                                        .map { it.responseType.toKotlinType() }
+                                        .plus(parameterTypes)
+                                        .plus(models)
+                                        .distinct()
+                                        .sorted()
+                                        .forEach {
+                                            if (isListType(it)) {
+                                                +"registerList(${getListType(it)}.serializer().list)"
+                                            } else {
+                                                +"setMapper($it::class, $it.serializer())"
+                                            }
                                         }
-                                    }
-                                    +"setMapper(Date::class, object : KSerializer<Date>" {
-                                        +"override val descriptor: SerialDescriptor = StringDescriptor"
-                                        +"override fun serialize(output: Encoder, obj: Date) = output.encodeString(obj)"
-                                        +"override fun deserialize(input: Decoder): Date = input.decodeString()"
-                                    }
-                                    +")"
+
                                     /*for (method in route.methodsList) {
                                         val responseType = method.responseType.toKotlinType()
                                     }
@@ -186,22 +195,34 @@ object SwaggerGeneratorRaw : SwaggerGeneratorBase() {
                                         val default = if (param.required) "" else "? = null"
                                         +"${param.name}: ${param.schema.toKotlinType()}$default, // ${param.inside}"
                                     }
-                                    +"callback: (result: $resultType?, error: Throwable?) -> Unit"
+                                    +"callback: (result: $resultType?, error: ApiException?) -> Unit"
                                 }
-                                +") " {
+                                +")" {
                                     val replacedPath = method.path.replace(Regex("\\{(\\w+)\\}")) {
                                         "\$" + it.groupValues[1]
                                     }
-                                    +"launchAndCatch(" {
-                                        +"callback(null, it)"
-                                    }
-                                    +"," {
+                                    +"launchAndCatch(localDefaultDispatcher, localMainDispatcher, { callback(null, it) }, {"
+                                    indent {
                                         +"val result = client.${method.method}<$responseType>(\"\$endpoint$replacedPath\")" {
                                             if (method.parametersQuery.isNotEmpty()) {
                                                 +"this.url" {
                                                     +"this.parameters.apply" {
                                                         for (param in method.parametersQuery) {
-                                                            +"${param.name}?.let { this.append(${param.name.quote()}, \"\$it\") }"
+                                                            val nullable = if (param.required) "" else "?"
+                                                            val appendText = if (param.schema.toKotlinType().contains("List")) {
+                                                                val appendValue = if (param.required) param.name else "it"
+                                                                "this.append(${param.name.quote()}, $appendValue.joinToString(\",\"))"
+                                                            } else {
+                                                                val appendValue = if (param.required)
+                                                                    (if (param.schema.toKotlinType() == "String") param.name else "\"\$${param.name}\"") else (if (param.schema.toKotlinType() == "String") "it" else "\"\$it\"")
+                                                                "this.append(${param.name.quote()}, $appendValue)"
+                                                            }
+
+                                                            if (param.required) {
+                                                                +appendText
+                                                            } else {
+                                                                +"${param.name}$nullable.let { $appendText }"
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -211,13 +232,19 @@ object SwaggerGeneratorRaw : SwaggerGeneratorBase() {
                                             }
                                         }
                                         if (isListType) {
-                                            +"val listResult = JSON(strictMode = false).parse(${getListType(method.responseType.toKotlinType())}.serializer().list, result)"
-                                            +"callback(listResult, null)"
-                                        } else {
-                                            +"callback(result, null)"
+                                            +"val listResult = json.parse(${getListType(method.responseType.toKotlinType())}.serializer().list, result)"
                                         }
+                                        +"localMainDispatcher.launch {"
+                                        indent {
+                                            if (isListType) {
+                                                +"callback(listResult, null)"
+                                            } else {
+                                                +"callback(result, null)"
+                                            }
+                                        }
+                                        +"}"
                                     }
-                                    + ")"
+                                    +"})"
                                 }
                             }
                         }

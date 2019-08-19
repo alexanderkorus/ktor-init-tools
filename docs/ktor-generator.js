@@ -76,6 +76,14 @@
   var map = Kotlin.kotlin.sequences.map_z5avom$;
   var toList = Kotlin.kotlin.sequences.toList_veqyi0$;
   var mapOf_0 = Kotlin.kotlin.collections.mapOf_x2b85n$;
+  var flatten = Kotlin.kotlin.collections.flatten_u0ad8z$;
+  var asSequence = Kotlin.kotlin.collections.asSequence_7wnvza$;
+  var flatten_0 = Kotlin.kotlin.sequences.flatten_d9bjs1$;
+  var plus_3 = Kotlin.kotlin.sequences.plus_v0iwhp$;
+  var plus_4 = Kotlin.kotlin.sequences.plus_639hpx$;
+  var distinct = Kotlin.kotlin.sequences.distinct_veqyi0$;
+  var sorted = Kotlin.kotlin.sequences.sorted_gtzq52$;
+  var contains_0 = Kotlin.kotlin.text.contains_li3zpu$;
   var PrimitiveClasses$stringClass = Kotlin.kotlin.reflect.js.internal.PrimitiveClasses.stringClass;
   var getKClass = Kotlin.getKClass;
   var kotlin = Kotlin.kotlin;
@@ -87,10 +95,11 @@
   var PrimitiveClasses$doubleClass = Kotlin.kotlin.reflect.js.internal.PrimitiveClasses.doubleClass;
   var PrimitiveClasses$anyClass = Kotlin.kotlin.reflect.js.internal.PrimitiveClasses.anyClass;
   var substringAfterLast = Kotlin.kotlin.text.substringAfterLast_8cymmc$;
+  var substringAfterLast_0 = Kotlin.kotlin.text.substringAfterLast_j4ogox$;
   var Map = Kotlin.kotlin.collections.Map;
   var toIntOrNull = Kotlin.kotlin.text.toIntOrNull_pdl1vz$;
   var rangeTo = Kotlin.kotlin.ranges.rangeTo_8xshf9$;
-  var distinct = Kotlin.kotlin.collections.distinct_7wnvza$;
+  var distinct_0 = Kotlin.kotlin.collections.distinct_7wnvza$;
   var filterNotNull = Kotlin.kotlin.collections.filterNotNull_m3lr2h$;
   var L0 = Kotlin.Long.ZERO;
   var toMutableList = Kotlin.kotlin.collections.toMutableList_4c7yge$;
@@ -204,6 +213,10 @@
   AuthBasicClientFeature.prototype.constructor = AuthBasicClientFeature;
   JsonClientFeature.prototype = Object.create(ClientFeature.prototype);
   JsonClientFeature.prototype.constructor = JsonClientFeature;
+  LoggingClientFeature.prototype = Object.create(ClientFeature.prototype);
+  LoggingClientFeature.prototype.constructor = LoggingClientFeature;
+  UserAgentClientFeature.prototype = Object.create(ClientFeature.prototype);
+  UserAgentClientFeature.prototype.constructor = UserAgentClientFeature;
   WebSocketClientFeature.prototype = Object.create(ClientFeature.prototype);
   WebSocketClientFeature.prototype.constructor = WebSocketClientFeature;
   AuthBasicFeature.prototype = Object.create(ServerFeature.prototype);
@@ -4106,9 +4119,11 @@
     this.V094 = new KtorVersion('0.9.4', '1.2.61');
     this.V095 = new KtorVersion('0.9.5', '1.2.70');
     this.V100 = new KtorVersion('1.0.0', '1.3.10');
-    this.ALL = [this.V094, this.V095, this.V100];
-    this.LAST = this.V100;
-    this.LAST_EAP = this.V100;
+    this.V101 = new KtorVersion('1.0.1', '1.3.10');
+    this.V111 = new KtorVersion('1.1.1', '1.3.11');
+    this.ALL = [this.V094, this.V095, this.V100, this.V101, this.V111];
+    this.LAST = this.V111;
+    this.LAST_EAP = this.V111;
     var $receiver = this.ALL;
     var capacity = coerceAtLeast(mapCapacity($receiver.length), 16);
     var destination = LinkedHashMap_init_0(capacity);
@@ -5371,6 +5386,137 @@
     }
     return JsonClientFeature_instance;
   }
+  function LoggingClientFeature() {
+    LoggingClientFeature_instance = this;
+    ClientFeature.call(this, [CoreClientEngine_getInstance()]);
+    this.id_3ggcs5$_0 = 'ktor-client-logging';
+    this.title_3q9ec$_0 = 'Logging feature';
+    this.description_o0n9vc$_0 = 'Logging feature for debugging client calls';
+    this.documentation_svsyiy$_0 = 'https://ktor.io/clients/http-client/features/logging.html';
+    this.since_kvwdy$_0 = Versions_getInstance().V101;
+    this.artifacts_w0af7h$_0 = listOf('io.ktor:ktor-client-logging-jvm:$ktor_version');
+  }
+  Object.defineProperty(LoggingClientFeature.prototype, 'id', {
+    get: function () {
+      return this.id_3ggcs5$_0;
+    }
+  });
+  Object.defineProperty(LoggingClientFeature.prototype, 'title', {
+    get: function () {
+      return this.title_3q9ec$_0;
+    }
+  });
+  Object.defineProperty(LoggingClientFeature.prototype, 'description', {
+    get: function () {
+      return this.description_o0n9vc$_0;
+    }
+  });
+  Object.defineProperty(LoggingClientFeature.prototype, 'documentation', {
+    get: function () {
+      return this.documentation_svsyiy$_0;
+    }
+  });
+  Object.defineProperty(LoggingClientFeature.prototype, 'since', {
+    get: function () {
+      return this.since_kvwdy$_0;
+    }
+  });
+  Object.defineProperty(LoggingClientFeature.prototype, 'artifacts', {
+    get: function () {
+      return this.artifacts_w0af7h$_0;
+    }
+  });
+  function LoggingClientFeature$renderFeature$lambda($receiver) {
+    var $receiver_0 = 'install(Logging)';
+    var rafter = ''.length === 0 ? '' : ' ' + '';
+    $receiver.line_61zpoe$($receiver_0.length === 0 ? '{' + rafter : $receiver_0 + ' {' + rafter);
+    $receiver._indent();
+    try {
+      $receiver.line_61zpoe$('level = LogLevel.HEADERS');
+    }
+    finally {
+      $receiver._unindent();
+    }
+    $receiver.line_61zpoe$('}' + '');
+    return Unit;
+  }
+  LoggingClientFeature.prototype.renderFeature_gtq0m3$ = function ($receiver, info) {
+    addImport($receiver, 'io.ktor.client.features.logging.*');
+    $receiver.append_qu2wte$(CoreClientEngine_getInstance().CLIENT_FEATURES, void 0, LoggingClientFeature$renderFeature$lambda);
+  };
+  LoggingClientFeature.$metadata$ = {
+    kind: Kind_OBJECT,
+    simpleName: 'LoggingClientFeature',
+    interfaces: [ClientFeature]
+  };
+  var LoggingClientFeature_instance = null;
+  function LoggingClientFeature_getInstance() {
+    if (LoggingClientFeature_instance === null) {
+      new LoggingClientFeature();
+    }
+    return LoggingClientFeature_instance;
+  }
+  function UserAgentClientFeature() {
+    UserAgentClientFeature_instance = this;
+    ClientFeature.call(this, [CoreClientEngine_getInstance()]);
+    this.id_xgqe86$_0 = 'ktor-client-user-agent';
+    this.title_q3kvll$_0 = 'User agent feature';
+    this.description_97kgf7$_0 = 'User agent header support feature';
+    this.documentation_2qivbv$_0 = 'https://ktor.io/clients/http-client/features/user-agent.html';
+    this.since_qkqil7$_0 = Versions_getInstance().V101;
+  }
+  Object.defineProperty(UserAgentClientFeature.prototype, 'id', {
+    get: function () {
+      return this.id_xgqe86$_0;
+    }
+  });
+  Object.defineProperty(UserAgentClientFeature.prototype, 'title', {
+    get: function () {
+      return this.title_q3kvll$_0;
+    }
+  });
+  Object.defineProperty(UserAgentClientFeature.prototype, 'description', {
+    get: function () {
+      return this.description_97kgf7$_0;
+    }
+  });
+  Object.defineProperty(UserAgentClientFeature.prototype, 'documentation', {
+    get: function () {
+      return this.documentation_2qivbv$_0;
+    }
+  });
+  Object.defineProperty(UserAgentClientFeature.prototype, 'since', {
+    get: function () {
+      return this.since_qkqil7$_0;
+    }
+  });
+  Object.defineProperty(UserAgentClientFeature.prototype, 'artifacts', {
+    get: function () {
+      return emptyList();
+    }
+  });
+  function UserAgentClientFeature$renderFeature$lambda($receiver) {
+    $receiver.line_61zpoe$('BrowserUserAgent() // install default browser-like user-agent');
+    $receiver.line_61zpoe$('// install(UserAgent) { agent = "some user agent" }');
+    return Unit;
+  }
+  UserAgentClientFeature.prototype.renderFeature_gtq0m3$ = function ($receiver, info) {
+    addImport($receiver, 'io.ktor.client.features.UserAgent');
+    addImport($receiver, 'io.ktor.client.features.BrowserUserAgent');
+    $receiver.append_qu2wte$(CoreClientEngine_getInstance().CLIENT_FEATURES, void 0, UserAgentClientFeature$renderFeature$lambda);
+  };
+  UserAgentClientFeature.$metadata$ = {
+    kind: Kind_OBJECT,
+    simpleName: 'UserAgentClientFeature',
+    interfaces: [ClientFeature]
+  };
+  var UserAgentClientFeature_instance = null;
+  function UserAgentClientFeature_getInstance() {
+    if (UserAgentClientFeature_instance === null) {
+      new UserAgentClientFeature();
+    }
+    return UserAgentClientFeature_instance;
+  }
   function WebSocketClientFeature() {
     WebSocketClientFeature_instance = this;
     ClientFeature.call(this, [CoreClientEngine_getInstance(), CioClientEngine_getInstance(), WebsocketsFeature_getInstance()]);
@@ -6095,6 +6241,8 @@
   }
   AutoHeadResponseFeature.prototype.renderFeature_gtq0m3$ = function ($receiver, info) {
     addImport($receiver, 'io.ktor.features.*');
+    addImport($receiver, 'io.ktor.http.*');
+    addImport($receiver, 'io.ktor.http.content.*');
     addImport($receiver, 'io.ktor.util.date.*');
     addFeatureInstall($receiver, AutoHeadResponseFeature$renderFeature$lambda);
   };
@@ -12382,6 +12530,18 @@
   };
   function SwaggerGeneratorBase$swaggerDtos$lambda(closure$def) {
     return function ($receiver) {
+      var tmp$;
+      $receiver.line_61zpoe$('/**');
+      $receiver.line_61zpoe$(' * ' + ((tmp$ = closure$def.description) != null ? tmp$ : ''));
+      var tmp$_0;
+      tmp$_0 = closure$def.props.values.iterator();
+      while (tmp$_0.hasNext()) {
+        var element = tmp$_0.next();
+        var tmp$_1;
+        $receiver.line_61zpoe$(' * @param ' + element.name + ' ' + ((tmp$_1 = element.description) != null ? tmp$_1 : ''));
+      }
+      $receiver.line_61zpoe$('*/');
+      $receiver.line_61zpoe$('@Serializable');
       var classKeywords = !closure$def.props.isEmpty() ? 'data class' : 'class';
       if (closure$def.synthetic) {
         $receiver.line_61zpoe$('// Synthetic class name');
@@ -12391,38 +12551,41 @@
       try {
         var props = closure$def.props.values;
         var index = 0;
-        for (var tmp$ = props.iterator(); tmp$.hasNext(); ++index) {
-          var prop = tmp$.next();
+        for (var tmp$_2 = props.iterator(); tmp$_2.hasNext(); ++index) {
+          var prop = tmp$_2.next();
           var comma = index >= (props.size - 1 | 0) ? '' : ',';
-          $receiver.line_61zpoe$('val ' + prop.name + ': ' + toKotlinType(prop.type) + comma);
+          var questionmark = prop.required ? '' : '? = null';
+          var optional = prop.required ? '' : '@Optional ';
+          $receiver.line_61zpoe$(optional + 'val ' + prop.name + ': ' + toKotlinType(prop.type) + questionmark + comma);
         }
       }
       finally {
         $receiver._unindent();
       }
+      $receiver.line_61zpoe$(') {');
       var $receiver_0 = closure$def.propsList;
       var destination = ArrayList_init();
-      var tmp$_0;
-      tmp$_0 = $receiver_0.iterator();
-      while (tmp$_0.hasNext()) {
-        var element = tmp$_0.next();
-        if (element.type.rule != null)
-          destination.add_11rb$(element);
+      var tmp$_3;
+      tmp$_3 = $receiver_0.iterator();
+      while (tmp$_3.hasNext()) {
+        var element_0 = tmp$_3.next();
+        if (element_0.type.rule != null)
+          destination.add_11rb$(element_0);
       }
       var propsWithRules = destination;
       if (!propsWithRules.isEmpty()) {
-        $receiver.line_61zpoe$(') {');
         $receiver._indent();
         try {
           var rafter = ''.length === 0 ? '' : ' ' + '';
           $receiver.line_61zpoe$('init'.length === 0 ? '{' + rafter : 'init' + ' {' + rafter);
           $receiver._indent();
           try {
-            var tmp$_1;
-            tmp$_1 = propsWithRules.iterator();
-            while (tmp$_1.hasNext()) {
-              var prop_0 = tmp$_1.next();
-              $receiver.line_61zpoe$(prop_0.name + '.verifyParam(' + quote(prop_0.name) + ') { ' + toString(prop_0.toRuleString_61zpoe$('it')) + ' }');
+            var tmp$_4;
+            tmp$_4 = propsWithRules.iterator();
+            while (tmp$_4.hasNext()) {
+              var prop_0 = tmp$_4.next();
+              var questionmark_0 = prop_0.required ? '' : '?';
+              $receiver.line_61zpoe$(prop_0.name + questionmark_0 + '.verifyParam(' + quote(prop_0.name) + ') { ' + toString(prop_0.toRuleString_61zpoe$('it')) + ' }');
             }
           }
           finally {
@@ -12434,11 +12597,35 @@
         finally {
           $receiver._unindent();
         }
+        $receiver.line_61zpoe$('');
+      }
+      $receiver.line_61zpoe$('/**');
+      $receiver.line_61zpoe$(' * serializes this object to a JSON string');
+      $receiver.line_61zpoe$(' * @return JSON representation of this object');
+      $receiver.line_61zpoe$(' */');
+      $receiver.line_61zpoe$('fun toJson() = json.stringify(serializer(), this)');
+      $receiver.line_61zpoe$('');
+      $receiver._indent();
+      try {
+        $receiver.line_61zpoe$('companion object {');
+        $receiver._indent();
+        try {
+          $receiver.line_61zpoe$('/**');
+          $receiver.line_61zpoe$(' * deserializes the given JSON to an object of this kind');
+          $receiver.line_61zpoe$(' * @param string JSON string');
+          $receiver.line_61zpoe$(' * @return deserialized object');
+          $receiver.line_61zpoe$(' */');
+          $receiver.line_61zpoe$('fun fromJson(string: String) = json.parse(serializer(), string)');
+        }
+        finally {
+          $receiver._unindent();
+        }
         $receiver.line_61zpoe$('}');
       }
-       else {
-        $receiver.line_61zpoe$(')');
+      finally {
+        $receiver._unindent();
       }
+      $receiver.line_61zpoe$('}');
       return Unit;
     };
   }
@@ -13846,13 +14033,20 @@
     $receiver.line_61zpoe$('import io.ktor.client.request.*');
     return Unit;
   }
-  function SwaggerGeneratorRaw$fileSwaggerFrontendHandler$lambda$lambda$lambda$lambda$lambda$lambda(closure$param) {
-    return function ($receiver) {
-      toKotlinDefault_0($receiver, closure$param.schema, closure$param.default, true);
-      return Unit;
-    };
+  function SwaggerGeneratorRaw$fileSwaggerFrontendHandler$lambda$lambda_1($receiver) {
+    $receiver.line_61zpoe$('typealias Date = String');
+    return Unit;
   }
-  function SwaggerGeneratorRaw$fileSwaggerFrontendHandler$lambda$lambda$lambda$lambda(closure$method, this$SwaggerGeneratorRaw, closure$responseType) {
+  function SwaggerGeneratorRaw$fileSwaggerFrontendHandler$lambda$lambda$lambda$lambda$lambda$lambda$lambda$lambda(it) {
+    return it.parametersBody;
+  }
+  function SwaggerGeneratorRaw$fileSwaggerFrontendHandler$lambda$lambda$lambda$lambda$lambda$lambda$lambda$lambda_0(it) {
+    return toKotlinType_0(it.schema.type);
+  }
+  function SwaggerGeneratorRaw$fileSwaggerFrontendHandler$lambda$lambda$lambda$lambda$lambda$lambda$lambda$lambda_1(it) {
+    return toKotlinType_0(it.responseType);
+  }
+  function SwaggerGeneratorRaw$fileSwaggerFrontendHandler$lambda$lambda$lambda$lambda(closure$method, this$SwaggerGeneratorRaw, closure$resultType, closure$responseType, closure$isListType) {
     return function ($receiver) {
       var tmp$ = this$SwaggerGeneratorRaw;
       var tmp$_0 = closure$method.summaryDescription;
@@ -13867,78 +14061,211 @@
         destination.put_xwzc9p$(pair.first, pair.second);
       }
       tmp$.doc_lz4qb0$($receiver, '', tmp$_0, destination, closure$method.defaultResponse.description);
-      $receiver.line_61zpoe$('suspend fun ' + closure$method.methodName + '(');
+      $receiver.line_61zpoe$('fun ' + closure$method.methodName + '(');
       $receiver._indent();
       try {
+        var closure$method_0 = closure$method;
+        var closure$resultType_0 = closure$resultType;
         var tmp$_2;
-        tmp$_2 = get_metaIter(closure$method.parameters).iterator();
+        tmp$_2 = get_metaIter(closure$method_0.parameters).iterator();
         while (tmp$_2.hasNext()) {
           var tmp$_3 = tmp$_2.next();
           var pinfo = tmp$_3.component1()
           , param = tmp$_3.component2();
           var qpname = quote(param.name);
-          var default_0 = param.required ? '' : ' = ' + indentStringHere($receiver, SwaggerGeneratorRaw$fileSwaggerFrontendHandler$lambda$lambda$lambda$lambda$lambda$lambda(param));
-          $receiver.line_61zpoe$(param.name + ': ' + toKotlinType(param.schema) + default_0 + get_optComma(pinfo) + ' // ' + param.inside);
+          var default_0 = param.required ? '' : '? = null';
+          $receiver.line_61zpoe$(param.name + ': ' + toKotlinType(param.schema) + default_0 + ', // ' + param.inside);
         }
+        $receiver.line_61zpoe$('callback: (result: ' + closure$resultType_0 + '?, error: ApiException?) -> Unit');
       }
       finally {
         $receiver._unindent();
       }
-      var $receiver_1 = '): ' + closure$responseType;
       var rafter = ''.length === 0 ? '' : ' ' + '';
-      $receiver.line_61zpoe$($receiver_1.length === 0 ? '{' + rafter : $receiver_1 + ' {' + rafter);
+      $receiver.line_61zpoe$(')'.length === 0 ? '{' + rafter : ')' + ' {' + rafter);
       $receiver._indent();
       try {
-        var closure$method_0 = closure$method;
+        var closure$method_1 = closure$method;
         var closure$responseType_0 = closure$responseType;
-        var $receiver_2 = closure$method_0.path;
+        var closure$isListType_0 = closure$isListType;
+        var this$SwaggerGeneratorRaw_0 = this$SwaggerGeneratorRaw;
+        var $receiver_1 = closure$method_1.path;
         var regex = Regex_init('\\{(\\w+)\\}');
         var replace_20wsma$result;
         replace_20wsma$break: do {
-          var match = regex.find_905azu$($receiver_2);
+          var match = regex.find_905azu$($receiver_1);
           if (match == null) {
-            replace_20wsma$result = $receiver_2.toString();
+            replace_20wsma$result = $receiver_1.toString();
             break replace_20wsma$break;
           }
           var lastStart = 0;
-          var length = $receiver_2.length;
+          var length = $receiver_1.length;
           var sb = StringBuilder_init_0(length);
           do {
             var foundMatch = ensureNotNull(match);
-            sb.append_ezbsdh$($receiver_2, lastStart, foundMatch.range.start);
+            sb.append_ezbsdh$($receiver_1, lastStart, foundMatch.range.start);
             sb.append_gw00v9$('$' + foundMatch.groupValues.get_za3lpa$(1));
             lastStart = foundMatch.range.endInclusive + 1 | 0;
             match = foundMatch.next();
           }
            while (lastStart < length && match != null);
           if (lastStart < length) {
-            sb.append_ezbsdh$($receiver_2, lastStart, length);
+            sb.append_ezbsdh$($receiver_1, lastStart, length);
           }
           replace_20wsma$result = sb.toString();
         }
          while (false);
         var replacedPath = replace_20wsma$result;
-        var $receiver_3 = 'return client.' + closure$method_0.method + '<' + closure$responseType_0 + '>(' + '"' + '$' + 'endpoint' + replacedPath + '"' + ')';
-        var rafter_0 = ''.length === 0 ? '' : ' ' + '';
-        $receiver.line_61zpoe$($receiver_3.length === 0 ? '{' + rafter_0 : $receiver_3 + ' {' + rafter_0);
+        $receiver.line_61zpoe$('launchAndCatch(localDefaultDispatcher, localMainDispatcher, { callback(null, it) }, {');
         $receiver._indent();
         try {
-          if (!closure$method_0.parametersQuery.isEmpty()) {
-            var $receiver_4 = 'this.url';
-            var rafter_1 = ''.length === 0 ? '' : ' ' + '';
-            $receiver.line_61zpoe$($receiver_4.length === 0 ? '{' + rafter_1 : $receiver_4 + ' {' + rafter_1);
-            $receiver._indent();
-            try {
-              var $receiver_5 = 'this.parameters.apply';
-              var rafter_2 = ''.length === 0 ? '' : ' ' + '';
-              $receiver.line_61zpoe$($receiver_5.length === 0 ? '{' + rafter_2 : $receiver_5 + ' {' + rafter_2);
+          var $receiver_2 = 'val result = client.' + closure$method_1.method + '<' + closure$responseType_0.v + '>(' + '"' + '$' + 'endpoint' + replacedPath + '"' + ')';
+          var rafter_0 = ''.length === 0 ? '' : ' ' + '';
+          $receiver.line_61zpoe$($receiver_2.length === 0 ? '{' + rafter_0 : $receiver_2 + ' {' + rafter_0);
+          $receiver._indent();
+          try {
+            if (!closure$method_1.parametersQuery.isEmpty()) {
+              var $receiver_3 = 'this.url';
+              var rafter_1 = ''.length === 0 ? '' : ' ' + '';
+              $receiver.line_61zpoe$($receiver_3.length === 0 ? '{' + rafter_1 : $receiver_3 + ' {' + rafter_1);
               $receiver._indent();
               try {
+                var $receiver_4 = 'this.parameters.apply';
+                var rafter_2 = ''.length === 0 ? '' : ' ' + '';
+                $receiver.line_61zpoe$($receiver_4.length === 0 ? '{' + rafter_2 : $receiver_4 + ' {' + rafter_2);
+                $receiver._indent();
+                try {
+                  var tmp$_4;
+                  tmp$_4 = closure$method_1.parametersQuery.iterator();
+                  while (tmp$_4.hasNext()) {
+                    var param_0 = tmp$_4.next();
+                    if (contains_0(toKotlinType(param_0.schema), 'List')) {
+                      $receiver.line_61zpoe$(param_0.name + '?.let { this.append(' + quote(param_0.name) + ', it.joinToString(' + '"' + ',' + '"' + ')) }');
+                    }
+                     else {
+                      $receiver.line_61zpoe$(param_0.name + '?.let { this.append(' + quote(param_0.name) + ', ' + '"' + '$' + 'it' + '"' + ') }');
+                    }
+                  }
+                }
+                finally {
+                  $receiver._unindent();
+                }
+                $receiver.line_61zpoe$('}' + '');
+                unaryPlus_0($receiver);
+              }
+              finally {
+                $receiver._unindent();
+              }
+              $receiver.line_61zpoe$('}' + '');
+              unaryPlus_0($receiver);
+            }
+            if (!closure$method_1.parametersBody.isEmpty()) {
+              $receiver.line_61zpoe$('this.body = serializerKotlin.write(' + closure$method_1.parametersBody.get_za3lpa$(0).name + ')');
+            }
+          }
+          finally {
+            $receiver._unindent();
+          }
+          $receiver.line_61zpoe$('}' + '');
+          unaryPlus_0($receiver);
+          if (closure$isListType_0) {
+            $receiver.line_61zpoe$('val listResult = json.parse(' + this$SwaggerGeneratorRaw_0.getListType_0(toKotlinType_0(closure$method_1.responseType)) + '.serializer().list, result)');
+          }
+          $receiver.line_61zpoe$('localMainDispatcher.launch {');
+          $receiver._indent();
+          try {
+            if (closure$isListType_0) {
+              $receiver.line_61zpoe$('callback(listResult, null)');
+            }
+             else {
+              $receiver.line_61zpoe$('callback(result, null)');
+            }
+          }
+          finally {
+            $receiver._unindent();
+          }
+          $receiver.line_61zpoe$('}');
+        }
+        finally {
+          $receiver._unindent();
+        }
+        $receiver.line_61zpoe$('})');
+      }
+      finally {
+        $receiver._unindent();
+      }
+      $receiver.line_61zpoe$('}' + '');
+      unaryPlus_0($receiver);
+      return Unit;
+    };
+  }
+  function SwaggerGeneratorRaw$fileSwaggerFrontendHandler$lambda$lambda_2(closure$model, this$SwaggerGeneratorRaw) {
+    return function ($receiver) {
+      this$SwaggerGeneratorRaw.doc_lz4qb0$($receiver, closure$model.info.title + ' Client', closure$model.info.description);
+      var $receiver_0 = 'open class ' + closure$model.info.classNameClient + '(val endpoint: String)';
+      var rafter = ''.length === 0 ? '' : ' ' + '';
+      $receiver.line_61zpoe$($receiver_0.length === 0 ? '{' + rafter : $receiver_0 + ' {' + rafter);
+      $receiver._indent();
+      try {
+        var closure$model_0 = closure$model;
+        var this$SwaggerGeneratorRaw_0 = this$SwaggerGeneratorRaw;
+        var tmp$, tmp$_0;
+        $receiver.line_61zpoe$('val client: HttpClient');
+        var rafter_0 = ''.length === 0 ? '' : ' ' + '';
+        $receiver.line_61zpoe$('init'.length === 0 ? '{' + rafter_0 : 'init' + ' {' + rafter_0);
+        $receiver._indent();
+        try {
+          var $receiver_1 = 'this.client = actualHttpClient.config ';
+          var rafter_1 = ''.length === 0 ? '' : ' ' + '';
+          $receiver.line_61zpoe$($receiver_1.length === 0 ? '{' + rafter_1 : $receiver_1 + ' {' + rafter_1);
+          $receiver._indent();
+          try {
+            var $receiver_2 = 'install(JsonFeature)';
+            var rafter_2 = ''.length === 0 ? '' : ' ' + '';
+            $receiver.line_61zpoe$($receiver_2.length === 0 ? '{' + rafter_2 : $receiver_2 + ' {' + rafter_2);
+            $receiver._indent();
+            try {
+              var $receiver_3 = 'serializer = KotlinSerializer().apply';
+              var rafter_3 = ''.length === 0 ? '' : ' ' + '';
+              $receiver.line_61zpoe$($receiver_3.length === 0 ? '{' + rafter_3 : $receiver_3 + ' {' + rafter_3);
+              $receiver._indent();
+              try {
+                var $receiver_4 = closure$model_0.routesList;
+                var destination = ArrayList_init_0(collectionSizeOrDefault($receiver_4, 10));
+                var tmp$_1;
+                tmp$_1 = $receiver_4.iterator();
+                while (tmp$_1.hasNext()) {
+                  var item = tmp$_1.next();
+                  destination.add_11rb$(item.methodsList);
+                }
+                var parameterTypes = map(flatten_0(map(asSequence(flatten(destination)), SwaggerGeneratorRaw$fileSwaggerFrontendHandler$lambda$lambda$lambda$lambda$lambda$lambda$lambda$lambda)), SwaggerGeneratorRaw$fileSwaggerFrontendHandler$lambda$lambda$lambda$lambda$lambda$lambda$lambda$lambda_0);
+                var $receiver_5 = closure$model_0.definitions.values;
+                var destination_0 = ArrayList_init_0(collectionSizeOrDefault($receiver_5, 10));
+                var tmp$_2;
+                tmp$_2 = $receiver_5.iterator();
+                while (tmp$_2.hasNext()) {
+                  var item_0 = tmp$_2.next();
+                  destination_0.add_11rb$(item_0.name);
+                }
+                var models = destination_0;
+                var $receiver_6 = closure$model_0.routesList;
+                var destination_1 = ArrayList_init_0(collectionSizeOrDefault($receiver_6, 10));
+                var tmp$_3;
+                tmp$_3 = $receiver_6.iterator();
+                while (tmp$_3.hasNext()) {
+                  var item_1 = tmp$_3.next();
+                  destination_1.add_11rb$(item_1.methodsList);
+                }
                 var tmp$_4;
-                tmp$_4 = closure$method_0.parametersQuery.iterator();
+                tmp$_4 = sorted(distinct(plus_4(plus_3(map(asSequence(flatten(destination_1)), SwaggerGeneratorRaw$fileSwaggerFrontendHandler$lambda$lambda$lambda$lambda$lambda$lambda$lambda$lambda_1), parameterTypes), models))).iterator();
                 while (tmp$_4.hasNext()) {
-                  var param_0 = tmp$_4.next();
-                  $receiver.line_61zpoe$('this.append(' + quote(param_0.name) + ', ' + '"' + '$' + param_0.name + '"' + ')');
+                  var element = tmp$_4.next();
+                  if (this$SwaggerGeneratorRaw_0.isListType_0(element)) {
+                    $receiver.line_61zpoe$('registerList(' + this$SwaggerGeneratorRaw_0.getListType_0(element) + '.serializer().list)');
+                  }
+                   else {
+                    $receiver.line_61zpoe$('setMapper(' + element + '::class, ' + element + '.serializer())');
+                  }
                 }
               }
               finally {
@@ -13953,59 +14280,30 @@
             $receiver.line_61zpoe$('}' + '');
             unaryPlus_0($receiver);
           }
-          if (!closure$method_0.parametersBody.isEmpty()) {
-            var $receiver_6 = 'this.body = mutableMapOf<String, Any?>().apply';
-            var rafter_3 = ''.length === 0 ? '' : ' ' + '';
-            $receiver.line_61zpoe$($receiver_6.length === 0 ? '{' + rafter_3 : $receiver_6 + ' {' + rafter_3);
-            $receiver._indent();
-            try {
-              var tmp$_5;
-              tmp$_5 = closure$method_0.parametersBody.iterator();
-              while (tmp$_5.hasNext()) {
-                var param_1 = tmp$_5.next();
-                $receiver.line_61zpoe$('this[' + quote(param_1.name) + '] = ' + param_1.name);
-              }
-            }
-            finally {
-              $receiver._unindent();
-            }
-            $receiver.line_61zpoe$('}' + '');
-            unaryPlus_0($receiver);
+          finally {
+            $receiver._unindent();
           }
+          $receiver.line_61zpoe$('}' + '');
+          unaryPlus_0($receiver);
         }
         finally {
           $receiver._unindent();
         }
         $receiver.line_61zpoe$('}' + '');
         unaryPlus_0($receiver);
-      }
-      finally {
-        $receiver._unindent();
-      }
-      $receiver.line_61zpoe$('}' + '');
-      unaryPlus_0($receiver);
-      return Unit;
-    };
-  }
-  function SwaggerGeneratorRaw$fileSwaggerFrontendHandler$lambda$lambda_1(closure$model, this$SwaggerGeneratorRaw) {
-    return function ($receiver) {
-      this$SwaggerGeneratorRaw.doc_lz4qb0$($receiver, closure$model.info.title + ' Client', closure$model.info.description);
-      var $receiver_0 = 'open class ' + closure$model.info.classNameClient + '(val endpoint: String, val client: HttpClient = HttpClient())';
-      var rafter = ''.length === 0 ? '' : ' ' + '';
-      $receiver.line_61zpoe$($receiver_0.length === 0 ? '{' + rafter : $receiver_0 + ' {' + rafter);
-      $receiver._indent();
-      try {
-        var closure$model_0 = closure$model;
-        var this$SwaggerGeneratorRaw_0 = this$SwaggerGeneratorRaw;
-        var tmp$, tmp$_0;
         tmp$ = closure$model_0.routes.values.iterator();
         while (tmp$.hasNext()) {
           var route = tmp$.next();
           tmp$_0 = route.methodsList.iterator();
           while (tmp$_0.hasNext()) {
             var method = tmp$_0.next();
-            var responseType = toKotlinType_0(method.responseType);
-            SEPARATOR($receiver, SwaggerGeneratorRaw$fileSwaggerFrontendHandler$lambda$lambda$lambda$lambda(method, this$SwaggerGeneratorRaw_0, responseType));
+            var responseType = {v: toKotlinType_0(method.responseType)};
+            var resultType = responseType.v;
+            var isListType = this$SwaggerGeneratorRaw_0.isListType_0(responseType.v);
+            if (isListType) {
+              responseType.v = 'String';
+            }
+            SEPARATOR($receiver, SwaggerGeneratorRaw$fileSwaggerFrontendHandler$lambda$lambda$lambda$lambda(method, this$SwaggerGeneratorRaw_0, resultType, responseType, isListType));
           }
         }
       }
@@ -14049,7 +14347,8 @@
           case 0:
             SEPARATOR(this.local$$receiver, SwaggerGeneratorRaw$fileSwaggerFrontendHandler$lambda$lambda(this.local$closure$info));
             SEPARATOR(this.local$$receiver, SwaggerGeneratorRaw$fileSwaggerFrontendHandler$lambda$lambda_0);
-            return SEPARATOR(this.local$$receiver, SwaggerGeneratorRaw$fileSwaggerFrontendHandler$lambda$lambda_1(this.local$closure$model, this.local$this$SwaggerGeneratorRaw)), Unit;
+            SEPARATOR(this.local$$receiver, SwaggerGeneratorRaw$fileSwaggerFrontendHandler$lambda$lambda_1);
+            return SEPARATOR(this.local$$receiver, SwaggerGeneratorRaw$fileSwaggerFrontendHandler$lambda$lambda_2(this.local$closure$model, this.local$this$SwaggerGeneratorRaw)), Unit;
           case 1:
             throw this.exception_0;
           default:this.state_0 = 1;
@@ -14144,6 +14443,13 @@
   SwaggerGeneratorRaw.prototype.fileSwaggerDtos_s1stdk$ = function ($receiver, fileName, info, model) {
     $receiver.fileText_6jjb1r$(fileName, void 0, void 0, SwaggerGeneratorRaw$fileSwaggerDtos$lambda(info, model, this));
   };
+  SwaggerGeneratorRaw.prototype.isListType_0 = function (type) {
+    return startsWith(type, 'List<');
+  };
+  SwaggerGeneratorRaw.prototype.getListType_0 = function (type) {
+    var tmp$, tmp$_0, tmp$_1;
+    return (tmp$_1 = (tmp$_0 = (tmp$ = Regex_init('List<(.+)>').find_905azu$(type)) != null ? tmp$.groupValues : null) != null ? tmp$_0.get_za3lpa$(1) : null) != null ? tmp$_1 : 'ERROR';
+  };
   SwaggerGeneratorRaw.$metadata$ = {
     kind: Kind_OBJECT,
     simpleName: 'SwaggerGeneratorRaw',
@@ -14186,7 +14492,7 @@
       var list_0 = element_0.processedTags;
       addAll(destination_0, list_0);
     }
-    this.tags = distinct(destination_0);
+    this.tags = distinct_0(destination_0);
   }
   function SwaggerModel$Server(url, description, variables) {
     this.url = url;
@@ -14263,10 +14569,13 @@
   SwaggerModel$ServerVariable.prototype.equals = function (other) {
     return this === other || (other !== null && (typeof other === 'object' && (Object.getPrototypeOf(this) === Object.getPrototypeOf(other) && (Kotlin.equals(this.name, other.name) && Kotlin.equals(this.default, other.default) && Kotlin.equals(this.description, other.description) && Kotlin.equals(this.enum, other.enum)))));
   };
-  function SwaggerModel$InfoGenType(type, rule, default_0) {
+  function SwaggerModel$InfoGenType(type, rule, default_0, description) {
+    if (description === void 0)
+      description = null;
     this.type = type;
     this.rule = rule;
     this.default = default_0;
+    this.description = description;
   }
   SwaggerModel$InfoGenType.prototype.toString = function () {
     return this.rule != null ? this.type.toString() + '(' + toString(this.rule) + ')' : this.type.toString();
@@ -14613,8 +14922,11 @@
     }
     return SwaggerModel$DateTimeType_instance;
   }
-  function SwaggerModel$ArrayType(items) {
+  function SwaggerModel$ArrayType(items, description) {
+    if (description === void 0)
+      description = null;
     this.items = items;
+    this.description = description;
     this.ktype_guyhh$_0 = getKClass(List);
   }
   Object.defineProperty(SwaggerModel$ArrayType.prototype, 'ktype', {
@@ -14633,19 +14945,26 @@
   SwaggerModel$ArrayType.prototype.component1 = function () {
     return this.items;
   };
-  SwaggerModel$ArrayType.prototype.copy_d75mr0$ = function (items) {
-    return new SwaggerModel$ArrayType(items === void 0 ? this.items : items);
+  SwaggerModel$ArrayType.prototype.component2 = function () {
+    return this.description;
+  };
+  SwaggerModel$ArrayType.prototype.copy_qqwihz$ = function (items, description) {
+    return new SwaggerModel$ArrayType(items === void 0 ? this.items : items, description === void 0 ? this.description : description);
   };
   SwaggerModel$ArrayType.prototype.hashCode = function () {
     var result = 0;
     result = result * 31 + Kotlin.hashCode(this.items) | 0;
+    result = result * 31 + Kotlin.hashCode(this.description) | 0;
     return result;
   };
   SwaggerModel$ArrayType.prototype.equals = function (other) {
-    return this === other || (other !== null && (typeof other === 'object' && (Object.getPrototypeOf(this) === Object.getPrototypeOf(other) && Kotlin.equals(this.items, other.items))));
+    return this === other || (other !== null && (typeof other === 'object' && (Object.getPrototypeOf(this) === Object.getPrototypeOf(other) && (Kotlin.equals(this.items, other.items) && Kotlin.equals(this.description, other.description)))));
   };
-  function SwaggerModel$OptionalType(type) {
+  function SwaggerModel$OptionalType(type, description) {
+    if (description === void 0)
+      description = null;
     this.type = type;
+    this.description = description;
     this.ktype_jjlloc$_0 = PrimitiveClasses$anyClass;
   }
   Object.defineProperty(SwaggerModel$OptionalType.prototype, 'ktype', {
@@ -14664,16 +14983,20 @@
   SwaggerModel$OptionalType.prototype.component1 = function () {
     return this.type;
   };
-  SwaggerModel$OptionalType.prototype.copy_d75mr0$ = function (type) {
-    return new SwaggerModel$OptionalType(type === void 0 ? this.type : type);
+  SwaggerModel$OptionalType.prototype.component2 = function () {
+    return this.description;
+  };
+  SwaggerModel$OptionalType.prototype.copy_qqwihz$ = function (type, description) {
+    return new SwaggerModel$OptionalType(type === void 0 ? this.type : type, description === void 0 ? this.description : description);
   };
   SwaggerModel$OptionalType.prototype.hashCode = function () {
     var result = 0;
     result = result * 31 + Kotlin.hashCode(this.type) | 0;
+    result = result * 31 + Kotlin.hashCode(this.description) | 0;
     return result;
   };
   SwaggerModel$OptionalType.prototype.equals = function (other) {
-    return this === other || (other !== null && (typeof other === 'object' && (Object.getPrototypeOf(this) === Object.getPrototypeOf(other) && Kotlin.equals(this.type, other.type))));
+    return this === other || (other !== null && (typeof other === 'object' && (Object.getPrototypeOf(this) === Object.getPrototypeOf(other) && (Kotlin.equals(this.type, other.type) && Kotlin.equals(this.description, other.description)))));
   };
   function SwaggerModel$MapLikeGenType() {
   }
@@ -14682,11 +15005,14 @@
     simpleName: 'MapLikeGenType',
     interfaces: [SwaggerModel$GenType]
   };
-  function SwaggerModel$NamedObject(path, kind) {
+  function SwaggerModel$NamedObject(path, kind, description) {
+    if (description === void 0)
+      description = null;
     this.path = path;
     this.kind = kind;
+    this.description = description;
     this.ktype_r8xcpc$_0 = PrimitiveClasses$anyClass;
-    this.name = substringAfterLast(this.path, 47);
+    this.name = substringAfterLast_0(substringAfterLast(this.path, 47), '.');
     this.fields_fk2cii$_0 = this.kind.type.fields;
   }
   Object.defineProperty(SwaggerModel$NamedObject.prototype, 'ktype', {
@@ -14713,22 +15039,29 @@
   SwaggerModel$NamedObject.prototype.component2 = function () {
     return this.kind;
   };
-  SwaggerModel$NamedObject.prototype.copy_ikpv5x$ = function (path, kind) {
-    return new SwaggerModel$NamedObject(path === void 0 ? this.path : path, kind === void 0 ? this.kind : kind);
+  SwaggerModel$NamedObject.prototype.component3 = function () {
+    return this.description;
+  };
+  SwaggerModel$NamedObject.prototype.copy_72bms2$ = function (path, kind, description) {
+    return new SwaggerModel$NamedObject(path === void 0 ? this.path : path, kind === void 0 ? this.kind : kind, description === void 0 ? this.description : description);
   };
   SwaggerModel$NamedObject.prototype.hashCode = function () {
     var result = 0;
     result = result * 31 + Kotlin.hashCode(this.path) | 0;
     result = result * 31 + Kotlin.hashCode(this.kind) | 0;
+    result = result * 31 + Kotlin.hashCode(this.description) | 0;
     return result;
   };
   SwaggerModel$NamedObject.prototype.equals = function (other) {
-    return this === other || (other !== null && (typeof other === 'object' && (Object.getPrototypeOf(this) === Object.getPrototypeOf(other) && (Kotlin.equals(this.path, other.path) && Kotlin.equals(this.kind, other.kind)))));
+    return this === other || (other !== null && (typeof other === 'object' && (Object.getPrototypeOf(this) === Object.getPrototypeOf(other) && (Kotlin.equals(this.path, other.path) && Kotlin.equals(this.kind, other.kind) && Kotlin.equals(this.description, other.description)))));
   };
-  function SwaggerModel$ObjType(namePath, guessPath, propList) {
+  function SwaggerModel$ObjType(namePath, guessPath, propList, description) {
+    if (description === void 0)
+      description = null;
     this.namePath = namePath;
     this.guessPath = guessPath;
     this.propList = propList;
+    this.description = description;
     var $receiver = this.propList;
     var capacity = coerceAtLeast(mapCapacity(collectionSizeOrDefault($receiver, 10)), 16);
     var destination = LinkedHashMap_init_0(capacity);
@@ -14778,23 +15111,30 @@
   SwaggerModel$ObjType.prototype.component3 = function () {
     return this.propList;
   };
-  SwaggerModel$ObjType.prototype.copy_ratv2z$ = function (namePath, guessPath, propList) {
-    return new SwaggerModel$ObjType(namePath === void 0 ? this.namePath : namePath, guessPath === void 0 ? this.guessPath : guessPath, propList === void 0 ? this.propList : propList);
+  SwaggerModel$ObjType.prototype.component4 = function () {
+    return this.description;
+  };
+  SwaggerModel$ObjType.prototype.copy_sh1co8$ = function (namePath, guessPath, propList, description) {
+    return new SwaggerModel$ObjType(namePath === void 0 ? this.namePath : namePath, guessPath === void 0 ? this.guessPath : guessPath, propList === void 0 ? this.propList : propList, description === void 0 ? this.description : description);
   };
   SwaggerModel$ObjType.prototype.hashCode = function () {
     var result = 0;
     result = result * 31 + Kotlin.hashCode(this.namePath) | 0;
     result = result * 31 + Kotlin.hashCode(this.guessPath) | 0;
     result = result * 31 + Kotlin.hashCode(this.propList) | 0;
+    result = result * 31 + Kotlin.hashCode(this.description) | 0;
     return result;
   };
   SwaggerModel$ObjType.prototype.equals = function (other) {
-    return this === other || (other !== null && (typeof other === 'object' && (Object.getPrototypeOf(this) === Object.getPrototypeOf(other) && (Kotlin.equals(this.namePath, other.namePath) && Kotlin.equals(this.guessPath, other.guessPath) && Kotlin.equals(this.propList, other.propList)))));
+    return this === other || (other !== null && (typeof other === 'object' && (Object.getPrototypeOf(this) === Object.getPrototypeOf(other) && (Kotlin.equals(this.namePath, other.namePath) && Kotlin.equals(this.guessPath, other.guessPath) && Kotlin.equals(this.propList, other.propList) && Kotlin.equals(this.description, other.description)))));
   };
-  function SwaggerModel$Prop(name, type, required) {
+  function SwaggerModel$Prop(name, type, required, description) {
+    if (description === void 0)
+      description = null;
     this.name = name;
     this.type = type;
     this.required = required;
+    this.description = description;
     this.rtype = this.required ? this.type : new SwaggerModel$OptionalType(this.type);
   }
   Object.defineProperty(SwaggerModel$Prop.prototype, 'rule', {
@@ -14822,21 +15162,25 @@
   SwaggerModel$Prop.prototype.component3 = function () {
     return this.required;
   };
-  SwaggerModel$Prop.prototype.copy_iuimd$ = function (name, type, required) {
-    return new SwaggerModel$Prop(name === void 0 ? this.name : name, type === void 0 ? this.type : type, required === void 0 ? this.required : required);
+  SwaggerModel$Prop.prototype.component4 = function () {
+    return this.description;
+  };
+  SwaggerModel$Prop.prototype.copy_w8z7js$ = function (name, type, required, description) {
+    return new SwaggerModel$Prop(name === void 0 ? this.name : name, type === void 0 ? this.type : type, required === void 0 ? this.required : required, description === void 0 ? this.description : description);
   };
   SwaggerModel$Prop.prototype.toString = function () {
-    return 'Prop(name=' + Kotlin.toString(this.name) + (', type=' + Kotlin.toString(this.type)) + (', required=' + Kotlin.toString(this.required)) + ')';
+    return 'Prop(name=' + Kotlin.toString(this.name) + (', type=' + Kotlin.toString(this.type)) + (', required=' + Kotlin.toString(this.required)) + (', description=' + Kotlin.toString(this.description)) + ')';
   };
   SwaggerModel$Prop.prototype.hashCode = function () {
     var result = 0;
     result = result * 31 + Kotlin.hashCode(this.name) | 0;
     result = result * 31 + Kotlin.hashCode(this.type) | 0;
     result = result * 31 + Kotlin.hashCode(this.required) | 0;
+    result = result * 31 + Kotlin.hashCode(this.description) | 0;
     return result;
   };
   SwaggerModel$Prop.prototype.equals = function (other) {
-    return this === other || (other !== null && (typeof other === 'object' && (Object.getPrototypeOf(this) === Object.getPrototypeOf(other) && (Kotlin.equals(this.name, other.name) && Kotlin.equals(this.type, other.type) && Kotlin.equals(this.required, other.required)))));
+    return this === other || (other !== null && (typeof other === 'object' && (Object.getPrototypeOf(this) === Object.getPrototypeOf(other) && (Kotlin.equals(this.name, other.name) && Kotlin.equals(this.type, other.type) && Kotlin.equals(this.required, other.required) && Kotlin.equals(this.description, other.description)))));
   };
   function SwaggerModel$SecurityDefinition(id, description, type, name, inside) {
     this.id = id;
@@ -15301,7 +15645,7 @@
       tmp$_14 = $receiver_6.iterator();
       while (tmp$_14.hasNext()) {
         var item_0 = tmp$_14.next();
-        destination_5.add_11rb$(new SwaggerModel$Prop(item_0.name, item_0.schema, true));
+        destination_5.add_11rb$(new SwaggerModel$Prop(item_0.name, item_0.schema, true, item_0.description));
       }
       tmp$_11 = listOf(new SwaggerModel$TypeWithContentType(tmp$_12, new SwaggerModel$InfoGenType(new SwaggerModel$ObjType(null, tmp$_13, destination_5), null, null)));
     }
@@ -15573,23 +15917,26 @@
   SwaggerModel$Companion.prototype.parseDefinitionElement_7govvk$ = function (def, root, namePath, guessPath) {
     var $receiver = package$util.DynamicAccess;
     var callback$result;
-    var tmp$, tmp$_0, tmp$_1;
+    var tmp$, tmp$_0, tmp$_1, tmp$_2, tmp$_3, tmp$_4;
     var ref = $receiver.get_s2h60f$(def, '$ref');
     if (ref != null) {
       var path = $receiver.get_str_mzud1t$(ref);
+      var description = (tmp$ = $receiver.get_s2h60f$(def, 'description')) != null ? $receiver.get_str_mzud1t$(tmp$) : null;
       var referee = this.parseDefinitionElement_7govvk$(Json_getInstance().followReference_d0xna2$(def, root, path), root, path, listOf(path));
       if (Kotlin.isType(referee.type, SwaggerModel$ObjType)) {
-        tmp$_0 = new SwaggerModel$InfoGenType(new SwaggerModel$NamedObject(path, Kotlin.isType(tmp$ = referee, SwaggerModel$InfoGenType) ? tmp$ : throwCCE()), null, null);
+        tmp$_1 = new SwaggerModel$InfoGenType(new SwaggerModel$NamedObject(path, Kotlin.isType(tmp$_0 = referee, SwaggerModel$InfoGenType) ? tmp$_0 : throwCCE(), referee.description), null, null, description);
       }
        else {
-        tmp$_0 = referee;
+        tmp$_1 = referee;
       }
-      return tmp$_0;
+      return tmp$_1;
     }
      else {
       var type = $receiver.get_s2h60f$(def, 'type');
       var format = $receiver.get_s2h60f$(def, 'format');
       var default_0 = $receiver.get_s2h60f$(def, 'default');
+      var description_0 = (tmp$_2 = $receiver.get_s2h60f$(def, 'description')) != null ? $receiver.get_str_mzud1t$(tmp$_2) : null;
+      var example = (tmp$_3 = $receiver.get_s2h60f$(def, 'example')) != null ? $receiver.get_str_mzud1t$(tmp$_3) : null;
       var rule = JsonRule$Companion_getInstance().parseOrNull_s8jyv4$(def);
       switch (type) {
         case 'integer':
@@ -15597,12 +15944,12 @@
             case 'int32':
             case 'null':
             case '':
-              tmp$_1 = SwaggerModel$Int32Type_getInstance();
+              tmp$_4 = SwaggerModel$Int32Type_getInstance();
               break;
             case 'int64':
-              tmp$_1 = SwaggerModel$Int64Type_getInstance();
+              tmp$_4 = SwaggerModel$Int64Type_getInstance();
               break;
-            default:tmp$_1 = SwaggerModel$Int32Type_getInstance();
+            default:tmp$_4 = SwaggerModel$Int32Type_getInstance();
               break;
           }
 
@@ -15610,14 +15957,14 @@
         case 'number':
           switch ($receiver.get_str_mzud1t$(format)) {
             case 'float':
-              tmp$_1 = SwaggerModel$FloatType_getInstance();
+              tmp$_4 = SwaggerModel$FloatType_getInstance();
               break;
             case 'double':
             case 'null':
             case '':
-              tmp$_1 = SwaggerModel$DoubleType_getInstance();
+              tmp$_4 = SwaggerModel$DoubleType_getInstance();
               break;
-            default:tmp$_1 = SwaggerModel$DoubleType_getInstance();
+            default:tmp$_4 = SwaggerModel$DoubleType_getInstance();
               break;
           }
 
@@ -15627,48 +15974,51 @@
             case 'string':
             case 'null':
             case '':
-              tmp$_1 = SwaggerModel$StringType_getInstance();
+              tmp$_4 = SwaggerModel$StringType_getInstance();
               break;
             case 'byte':
-              tmp$_1 = SwaggerModel$Base64Type_getInstance();
+              tmp$_4 = SwaggerModel$Base64Type_getInstance();
               break;
             case 'binary':
-              tmp$_1 = SwaggerModel$BinaryStringType_getInstance();
+              tmp$_4 = SwaggerModel$BinaryStringType_getInstance();
               break;
             case 'date':
-              tmp$_1 = SwaggerModel$DateType_getInstance();
+              tmp$_4 = SwaggerModel$DateType_getInstance();
               break;
             case 'date-time':
-              tmp$_1 = SwaggerModel$DateTimeType_getInstance();
+              tmp$_4 = SwaggerModel$DateTimeType_getInstance();
               break;
             case 'password':
-              tmp$_1 = SwaggerModel$PasswordType_getInstance();
+              tmp$_4 = SwaggerModel$PasswordType_getInstance();
               break;
-            default:tmp$_1 = SwaggerModel$StringType_getInstance();
+            default:tmp$_4 = SwaggerModel$StringType_getInstance();
               break;
           }
 
           break;
         case 'boolean':
-          tmp$_1 = SwaggerModel$BoolType_getInstance();
+          tmp$_4 = SwaggerModel$BoolType_getInstance();
           break;
         case 'array':
           var items = $receiver.get_s2h60f$(def, 'items');
-          tmp$_1 = new SwaggerModel$ArrayType(this.parseDefinitionElement_7govvk$(items, root, null, plus(guessPath, listOf('elements'))));
+          var element = this.parseDefinitionElement_7govvk$(items, root, null, plus(guessPath, listOf('elements')));
+          tmp$_4 = new SwaggerModel$ArrayType(element, element.description);
           break;
         default:if (type == null || equals(type, 'object')) {
             var props = $receiver.get_s2h60f$(def, 'properties');
             var required = toSet($receiver.get_strList_mzud1t$($receiver.get_s2h60f$(def, 'required')));
             var $receiver_0 = $receiver.get_strEntries_mzud1t$(props);
             var destination = ArrayList_init_0(collectionSizeOrDefault($receiver_0, 10));
-            var tmp$_2;
-            tmp$_2 = $receiver_0.iterator();
-            while (tmp$_2.hasNext()) {
-              var item = tmp$_2.next();
-              destination.add_11rb$(new SwaggerModel$Prop(item.first, this.parseDefinitionElement_7govvk$(item.second, root, null, plus_0(guessPath, item.first)), required.contains_11rb$(item.first)));
+            var tmp$_5;
+            tmp$_5 = $receiver_0.iterator();
+            while (tmp$_5.hasNext()) {
+              var item = tmp$_5.next();
+              var tmp$_6 = destination.add_11rb$;
+              var element_0 = this.parseDefinitionElement_7govvk$(item.second, root, null, plus_0(guessPath, item.first));
+              tmp$_6.call(destination, new SwaggerModel$Prop(item.first, element_0, required.contains_11rb$(item.first), element_0.description));
             }
             var entries = destination;
-            tmp$_1 = new SwaggerModel$ObjType(namePath, guessPath, entries);
+            tmp$_4 = new SwaggerModel$ObjType(namePath, guessPath, entries, (description_0 != null ? description_0 : '') + (example != null ? toString(example) : ''));
           }
            else if (equals(type, 'null')) {
             throw IllegalStateException_init(('null? : ' + toString(def)).toString());
@@ -15679,8 +16029,8 @@
 
           break;
       }
-      var ptype = tmp$_1;
-      callback$result = new SwaggerModel$InfoGenType(ptype, rule, default_0);
+      var ptype = tmp$_4;
+      callback$result = new SwaggerModel$InfoGenType(ptype, rule, default_0, (description_0 != null ? description_0 : '') + (example != null ? ' Example: ' + toString(example) : ''));
     }
     return callback$result;
   };
@@ -16066,10 +16416,13 @@
     simpleName: 'ReferenceFinder',
     interfaces: []
   };
-  function SwaggerModel$TypeDef(name, props, synthetic) {
+  function SwaggerModel$TypeDef(name, props, synthetic, description) {
+    if (description === void 0)
+      description = null;
     this.name = name;
     this.props = props;
     this.synthetic = synthetic;
+    this.description = description;
     this.propsList = this.props.values;
   }
   SwaggerModel$TypeDef.$metadata$ = {
@@ -16086,21 +16439,25 @@
   SwaggerModel$TypeDef.prototype.component3 = function () {
     return this.synthetic;
   };
-  SwaggerModel$TypeDef.prototype.copy_ngsr70$ = function (name, props, synthetic) {
-    return new SwaggerModel$TypeDef(name === void 0 ? this.name : name, props === void 0 ? this.props : props, synthetic === void 0 ? this.synthetic : synthetic);
+  SwaggerModel$TypeDef.prototype.component4 = function () {
+    return this.description;
+  };
+  SwaggerModel$TypeDef.prototype.copy_2phpkv$ = function (name, props, synthetic, description) {
+    return new SwaggerModel$TypeDef(name === void 0 ? this.name : name, props === void 0 ? this.props : props, synthetic === void 0 ? this.synthetic : synthetic, description === void 0 ? this.description : description);
   };
   SwaggerModel$TypeDef.prototype.toString = function () {
-    return 'TypeDef(name=' + Kotlin.toString(this.name) + (', props=' + Kotlin.toString(this.props)) + (', synthetic=' + Kotlin.toString(this.synthetic)) + ')';
+    return 'TypeDef(name=' + Kotlin.toString(this.name) + (', props=' + Kotlin.toString(this.props)) + (', synthetic=' + Kotlin.toString(this.synthetic)) + (', description=' + Kotlin.toString(this.description)) + ')';
   };
   SwaggerModel$TypeDef.prototype.hashCode = function () {
     var result = 0;
     result = result * 31 + Kotlin.hashCode(this.name) | 0;
     result = result * 31 + Kotlin.hashCode(this.props) | 0;
     result = result * 31 + Kotlin.hashCode(this.synthetic) | 0;
+    result = result * 31 + Kotlin.hashCode(this.description) | 0;
     return result;
   };
   SwaggerModel$TypeDef.prototype.equals = function (other) {
-    return this === other || (other !== null && (typeof other === 'object' && (Object.getPrototypeOf(this) === Object.getPrototypeOf(other) && (Kotlin.equals(this.name, other.name) && Kotlin.equals(this.props, other.props) && Kotlin.equals(this.synthetic, other.synthetic)))));
+    return this === other || (other !== null && (typeof other === 'object' && (Object.getPrototypeOf(this) === Object.getPrototypeOf(other) && (Kotlin.equals(this.name, other.name) && Kotlin.equals(this.props, other.props) && Kotlin.equals(this.synthetic, other.synthetic) && Kotlin.equals(this.description, other.description)))));
   };
   SwaggerModel.$metadata$ = {
     kind: Kind_CLASS,
@@ -16164,7 +16521,7 @@
     tmp$ = $receiver_0.iterator();
     while (tmp$.hasNext()) {
       var item = tmp$.next();
-      destination.add_11rb$(new SwaggerModel$TypeDef(item.name, item.kind.type.props, false));
+      destination.add_11rb$(new SwaggerModel$TypeDef(item.name, item.kind.type.props, false, item.description));
     }
     var $receiver_1 = filterNotNull(destination);
     var capacity = coerceAtLeast(mapCapacity(collectionSizeOrDefault($receiver_1, 10)), 16);
@@ -16192,10 +16549,10 @@
         var tmp$_4 = destination_2.add_11rb$;
         var name = item_1.key;
         var type = item_1.value;
-        tmp$_4.call(destination_2, to(name, new SwaggerModel$Prop(name, type, true)));
+        tmp$_4.call(destination_2, to(name, new SwaggerModel$Prop(name, type, true, type.description)));
       }
       var props = toMap(destination_2);
-      tmp$_2.call(destination_1, new SwaggerModel$TypeDef(item_0.guessName, props, true));
+      tmp$_2.call(destination_1, new SwaggerModel$TypeDef(item_0.guessName, props, true, item_0.description));
     }
     var capacity_0 = coerceAtLeast(mapCapacity(collectionSizeOrDefault(destination_1, 10)), 16);
     var destination_3 = LinkedHashMap_init_0(capacity_0);
@@ -20099,6 +20456,12 @@
   Object.defineProperty(package$client, 'JsonClientFeature', {
     get: JsonClientFeature_getInstance
   });
+  Object.defineProperty(package$client, 'LoggingClientFeature', {
+    get: LoggingClientFeature_getInstance
+  });
+  Object.defineProperty(package$client, 'UserAgentClientFeature', {
+    get: UserAgentClientFeature_getInstance
+  });
   Object.defineProperty(package$client, 'WebSocketClientFeature', {
     get: WebSocketClientFeature_getInstance
   });
@@ -20718,7 +21081,7 @@
   package$util.get_seconds_t5kl13$ = get_seconds;
   ALL_SERVER_FEATURES = lazy(ALL_SERVER_FEATURES$lambda);
   ALL_CLIENT_FEATURES = lazy(ALL_CLIENT_FEATURES$lambda);
-  ALL_FEATURES = listOf_0([CoreClientEngine_getInstance(), ApacheClientEngine_getInstance(), CioClientEngine_getInstance(), JettyClientEngine_getInstance(), MockClientEngine_getInstance(), AuthBasicClientFeature_getInstance(), JsonClientFeature_getInstance(), WebSocketClientFeature_getInstance(), HtmlDslFeature_getInstance(), CssDslFeature_getInstance(), FreemarkerFeature_getInstance(), VelocityFeature_getInstance(), StaticContentFeature_getInstance(), AuthBasicFeature_getInstance(), AuthDigestFeature_getInstance(), AuthJwtFeature_getInstance(), AuthLdapFeature_getInstance(), AuthOauthFeature_getInstance(), AuthFeature_getInstance(), JsonGsonFeature_getInstance(), JsonJacksonFeature_getInstance(), LocationsFeature_getInstance(), MetricsFeature_getInstance(), SessionsFeature_getInstance(), CompressionFeature_getInstance(), CachingHeadersFeature_getInstance(), CallLoggingFeature_getInstance(), ConditionalHeadersFeature_getInstance(), CORSFeature_getInstance(), AutoHeadResponseFeature_getInstance(), DataConversionFeature_getInstance(), DefaultHeadersFeature_getInstance(), ForwardedHeaderSupportFeature_getInstance(), HSTSFeature_getInstance(), StatusPagesFeature_getInstance(), RoutingFeature_getInstance(), WebjarsFeature_getInstance(), ContentNegotiationFeature_getInstance(), HttpsRedirectFeature_getInstance(), ShutdownUrlFeature_getInstance(), WebsocketsFeature_getInstance(), RawSocketsFeature_getInstance(), PartialContentFeature_getInstance(), RawSocketsTlsFeature_getInstance()]);
+  ALL_FEATURES = listOf_0([CoreClientEngine_getInstance(), ApacheClientEngine_getInstance(), CioClientEngine_getInstance(), JettyClientEngine_getInstance(), MockClientEngine_getInstance(), AuthBasicClientFeature_getInstance(), JsonClientFeature_getInstance(), WebSocketClientFeature_getInstance(), LoggingClientFeature_getInstance(), UserAgentClientFeature_getInstance(), HtmlDslFeature_getInstance(), CssDslFeature_getInstance(), FreemarkerFeature_getInstance(), VelocityFeature_getInstance(), StaticContentFeature_getInstance(), AuthBasicFeature_getInstance(), AuthDigestFeature_getInstance(), AuthJwtFeature_getInstance(), AuthLdapFeature_getInstance(), AuthOauthFeature_getInstance(), AuthFeature_getInstance(), JsonGsonFeature_getInstance(), JsonJacksonFeature_getInstance(), LocationsFeature_getInstance(), MetricsFeature_getInstance(), SessionsFeature_getInstance(), CompressionFeature_getInstance(), CachingHeadersFeature_getInstance(), CallLoggingFeature_getInstance(), ConditionalHeadersFeature_getInstance(), CORSFeature_getInstance(), AutoHeadResponseFeature_getInstance(), DataConversionFeature_getInstance(), DefaultHeadersFeature_getInstance(), ForwardedHeaderSupportFeature_getInstance(), HSTSFeature_getInstance(), StatusPagesFeature_getInstance(), RoutingFeature_getInstance(), WebjarsFeature_getInstance(), ContentNegotiationFeature_getInstance(), HttpsRedirectFeature_getInstance(), ShutdownUrlFeature_getInstance(), WebsocketsFeature_getInstance(), RawSocketsFeature_getInstance(), PartialContentFeature_getInstance(), RawSocketsTlsFeature_getInstance()]);
   var $receiver = ALL_FEATURES;
   var capacity = coerceAtLeast(mapCapacity(collectionSizeOrDefault($receiver, 10)), 16);
   var destination = LinkedHashMap_init_0(capacity);

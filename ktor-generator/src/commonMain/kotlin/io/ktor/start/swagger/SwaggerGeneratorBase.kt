@@ -51,6 +51,12 @@ open class SwaggerGeneratorBase {
         for (def in model.definitions.values) {
             SEPARATOR {
                 // @TODO: Consider using object instead?
+                +"/**"
+                +" * ${def.description ?: ""}"
+                def.props.values.forEach {
+                    +" * @param ${it.name} ${it.description ?: ""}"
+                }
+                +"*/"
                 +"@Serializable"
                 val classKeywords = if (def.props.isNotEmpty()) "data class" else "class"
                 if (def.synthetic) {
@@ -78,34 +84,23 @@ open class SwaggerGeneratorBase {
                         }
                         +""
                     }
+                    +"/**"
+                    +" * serializes this object to a JSON string"
+                    +" * @return JSON representation of this object"
+                    +" */"
+                    +"fun toJson() = json.stringify(serializer(), this)"
+                    +""
+
                     indent {
-                        +"@Serializer(forClass = ${def.name}::class)"
-                        +"companion object: KSerializer<${def.name}> {"
-                        indent {
-                            +"override fun serialize(output: Encoder, obj: ${def.name}) {"
+                        +"companion object {"
                             indent {
-                                +"val elemOutput = output.beginStructure(descriptor)"
-                                for ((index, prop) in def.props.values.withIndex()) {
-                                    val kotlineType = prop.type.toKotlinType()
-                                    val type = when (kotlineType) {
-                                        "Boolean", "Byte", "Char", "Double", "Float", "Int", "Long", "Short", "String", "Unit" -> kotlineType
-                                        "Date" -> "String"
-                                        else -> "Serializable"
-                                    }
-                                    var serializer = ""
-                                    if (type == "Serializable") {
-                                        serializer = if (isListType(kotlineType)) {
-                                            " ${getListType(kotlineType)}.serializer().list,"
-                                        } else {
-                                            " $kotlineType.serializer(),"
-                                        }
-                                    }
-                                    +"if (obj.${prop.name} != null) elemOutput.encode${type}Element(descriptor, $index,$serializer obj.${prop.name})"
-                                }
-                                +"elemOutput.endStructure(descriptor)"
+                                +"/**"
+                                +" * deserializes the given JSON to an object of this kind"
+                                +" * @param string JSON string"
+                                +" * @return deserialized object"
+                                +" */"
+                                +"fun fromJson(string: String) = json.parse(serializer(), string)"
                             }
-                            +"}"
-                        }
                         +"}"
                     }
                 +"}"
@@ -163,11 +158,4 @@ open class SwaggerGeneratorBase {
         return retval
     }
 
-    private fun isListType(type: String): Boolean {
-        return type.startsWith("List<")
-    }
-
-    private fun getListType(type: String): String {
-        return Regex("List<(.+)>").find(type)?.groupValues?.get(1) ?: "ERROR"
-    }
 }
